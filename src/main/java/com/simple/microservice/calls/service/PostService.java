@@ -15,7 +15,6 @@ public class PostService {
         return new ArrayList<>(posts.values());
     }
 
-    @Autowired
     public Map<Long, Post> getPosts() {
         return posts;
     }
