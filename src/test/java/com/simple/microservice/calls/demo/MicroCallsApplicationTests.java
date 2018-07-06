@@ -13,7 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
 public class MicroCallsApplicationTests {
-
+    AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+    PostService service = applicationContext.getBean(PostService.class);
     @Test
     public void contextLoads() {
     }
@@ -21,21 +22,17 @@ public class MicroCallsApplicationTests {
 
     @Test
     public void getPosts(){
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-
-        PostService service = applicationContext.getBean(PostService.class);
 
         System.out.println("All Posts:");
-
         for (Post post : service.getAllPosts()) {
             System.out.println(post);
         }
-
-
-
-
     }
 
+    @Test
+    public void getPostWhereIdIsOne(){
+        System.out.println(service.getById(1));
+    }
 
 
 }
