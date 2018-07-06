@@ -25,8 +25,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getById() {
-        return null;
+    public Post getById(int id) {
+        ResponseEntity<Post> post = restTemplate.getForEntity(ROOT_URI+"/"+id, Post.class);
+        return post.getBody();
     }
 
     @Override
