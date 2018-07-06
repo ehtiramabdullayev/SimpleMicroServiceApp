@@ -31,18 +31,19 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public HttpStatus addPost() {
-        return null;
+    public HttpStatus addPost(Post post) {
+        ResponseEntity<HttpStatus> responseEntity = restTemplate.postForEntity(ROOT_URI,post,HttpStatus.class);
+        return responseEntity.getBody();
     }
 
     @Override
-    public void updatePost() {
-
+    public void updatePost(Post post) {
+        restTemplate.put(ROOT_URI,post);
     }
 
     @Override
-    public void deletePost() {
-
+    public void deletePost(int id) {
+        restTemplate.delete(ROOT_URI+"/"+id);
     }
 
     public RestTemplate getRestTemplate() {

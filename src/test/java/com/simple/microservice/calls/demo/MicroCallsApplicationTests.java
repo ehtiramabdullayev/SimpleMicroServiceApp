@@ -13,8 +13,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
 public class MicroCallsApplicationTests {
+
     AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
     PostService service = applicationContext.getBean(PostService.class);
+
     @Test
     public void contextLoads() {
     }
@@ -34,5 +36,11 @@ public class MicroCallsApplicationTests {
         System.out.println(service.getById(1));
     }
 
+
+    @Test
+    public void deleteGivenPostWithIdOne(){
+        service.deletePost(1);
+
+    }
 
 }

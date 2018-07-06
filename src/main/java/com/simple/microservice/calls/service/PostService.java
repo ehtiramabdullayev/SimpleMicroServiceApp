@@ -8,7 +8,7 @@ import java.util.List;
 public interface PostService {
     List<Post> getAllPosts();
     Post getById(int id);
-    HttpStatus addPost();
-    void updatePost();
-    void deletePost();
+    HttpStatus addPost(Post post);
+    void updatePost(Post post);
+    void deletePost(int id);
 }
