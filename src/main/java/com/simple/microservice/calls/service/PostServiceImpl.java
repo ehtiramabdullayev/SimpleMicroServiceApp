@@ -14,7 +14,9 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
+    @Autowired
     private RestTemplate restTemplate;
+
     final String ROOT_URI = "http://localhost:3000/posts";
 
     @Override
@@ -48,7 +50,7 @@ public class PostServiceImpl implements PostService {
     public RestTemplate getRestTemplate() {
         return restTemplate;
     }
-    @Autowired
+
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
