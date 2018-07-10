@@ -26,48 +26,51 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
 public class MicroCallsApplicationTests {
+    private RestTemplate tempMock;
+
+    private PostService postService;
+
+    private List<Post> postList;
 
 
+    public void givenARestTemplate(){
 
-//    @Test
-//    public void postANewPost(){
-//        System.out.println("Adding a Post");
-//        Post p = new Post();
-//        p.setAuthor("Chris1243534");
-//        p.setTitle("New Title23232345345");
-//        HttpStatus status = postService.addPost(p);
-//        //System.out.println("Response = " + status);
-//
-//    }
-
-
-    @Test
-    public void testGetPostsBehaviour(){
-        PostService service = Mockito.mock(PostService.class);
-        service.addPost(new Post(1,"first","V"));
-        service.addPost(new Post(2,"second","X"));
-
-        Mockito.verify(service).addPost(new Post(1,"first","V"));
-        Mockito.verify(service).addPost(new Post(1,"second","X"));
+        tempMock = Mockito.mock(RestTemplate.class);
     }
 
+    //given
 
     @Test
     public void getAllPostsCalledOnce(){
-        RestTemplate tempMock = Mockito.mock(RestTemplate.class);
-        PostService postService = new PostServiceImpl(tempMock);
+        //All given
+        givenARestTemplate();
+        givenPostService();
+
         Post[] posts = new Post[1];
         posts[0]=new Post(1,"Qwerty","Post");
         ResponseEntity<Post[]> entity = Mockito.mock(ResponseEntity.class);
         Mockito.when(entity.getBody()).thenReturn(posts);
-        //
-        Mockito.when(tempMock.getForEntity(Mockito.anyString(),Mockito.any(Post[].class)).thenReturn();
+        Mockito.doReturn(entity).when(tempMock).getForEntity(Mockito.anyString(), Mockito.any());
 
-        List<Post> postList = postService.getAllPosts();
+        //When
+        whenCallingPostService();
 
+        //then
+        whenCallPostServiceForGetAllPosts();
+    }
+
+    //then
+    private void whenCallPostServiceForGetAllPosts(){
         Assert.assertEquals("passed",1,postList.get(0).getId());
     }
 
 
+    private void givenPostService(){
+        postService = new PostServiceImpl(tempMock);
+    }
+
+    private void whenCallingPostService(){
+        postList = postService.getAllPosts();
+    }
 
 }
