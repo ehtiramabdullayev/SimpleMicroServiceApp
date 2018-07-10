@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
+    private final RestTemplate restTemplate;
+
     @Autowired
-    private RestTemplate restTemplate;
+    public PostServiceImpl(RestTemplate restTemplate ) {
+        this.restTemplate = restTemplate;
+    }
 
     final String ROOT_URI = "http://localhost:3000/posts";
 
@@ -47,11 +51,4 @@ public class PostServiceImpl implements PostService {
         restTemplate.delete(ROOT_URI+"/"+id);
     }
 
-    public RestTemplate getRestTemplate() {
-        return restTemplate;
-    }
-
-    public void setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 }
