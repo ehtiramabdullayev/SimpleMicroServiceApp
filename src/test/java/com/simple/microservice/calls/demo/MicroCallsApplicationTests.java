@@ -1,6 +1,7 @@
 package com.simple.microservice.calls.demo;
 
 import com.simple.microservice.calls.bean.Post;
+import com.simple.microservice.calls.bean.ResponsePost;
 import com.simple.microservice.calls.config.AppConfig;
 import com.simple.microservice.calls.service.PostService;
 import com.simple.microservice.calls.service.PostServiceImpl;
@@ -14,6 +15,7 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -52,11 +55,73 @@ public class MicroCallsApplicationTests {
         Mockito.when(entity.getBody()).thenReturn(posts);
         Mockito.doReturn(entity).when(tempMock).getForEntity(Mockito.anyString(), Mockito.any());
 
-        //When
+        //when
         whenCallingPostService();
 
         //then
         whenCallPostServiceForGetAllPosts();
+    }
+
+
+
+
+
+//
+    @Test
+    public void testAddPost(){
+        givenARestTemplate();
+        givenPostService();
+        ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+
+        try {
+            postService.addPost(null);
+        } catch (Exception e) {
+            Assert.fail();
+        }
+
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddPostWithException(){
+        givenARestTemplate();
+        givenPostService();
+        ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+
+        postService.addPost(null);
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testAddMultiplePostsWithSuccess(){
+        givenARestTemplate();
+        givenPostService();
+
+        ResponsePost responsePost = new ResponsePost(2);
+        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+
+        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+
+        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+
+        postService.addMultiplePosts(Collections.singletonList(new Post(1, "", "")));
+
+
+
+    }
+
+
+
+
+
+
+    @Test
+    public void testDeletePost(){
+        givenARestTemplate();
+        givenPostService();
     }
 
     //then

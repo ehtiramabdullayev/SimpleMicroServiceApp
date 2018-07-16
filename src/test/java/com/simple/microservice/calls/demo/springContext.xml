@@ -1,0 +1,18 @@
+<beans>
+
+
+    <bean class="org.something.service.Manager">
+        <constructor-arg>
+            <bean id="supplier"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="profile" class="org.something.Profile">
+        <constructor-arg ref="admin"/>
+    </bean>
+
+    <bean id="admin" abstract="true">
+        <property value="YES"/>
+    </bean>
+
+        </beans>

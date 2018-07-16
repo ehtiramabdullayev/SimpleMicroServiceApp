@@ -2,6 +2,7 @@ package com.simple.microservice.calls.service;
 
 
 import com.simple.microservice.calls.bean.Post;
+import com.simple.microservice.calls.bean.ResponsePost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,10 +37,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public HttpStatus addPost(Post post) {
+    public void addPost(Post post) {
         ResponseEntity<HttpStatus> responseEntity = restTemplate.postForEntity(ROOT_URI,post,HttpStatus.class);
-        return responseEntity.getBody();
+
+        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalStateException();
+        }
     }
+
+    @Override
+    public void addMultiplePosts(List<Post> posts) {
+        ResponseEntity<ResponsePost> responseEntity = restTemplate.postForEntity(ROOT_URI, posts, ResponsePost.class);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            final ResponsePost responsePost = responseEntity.getBody();
+
+            if (responsePost.getNumberOfPostWereInserted() != posts.size()) {
+                throw new IllegalStateException("The actual number of inserted post were: " + responsePost.getNumberOfPostWereInserted());
+            }
+        }
+    }
+
+
 
     @Override
     public void updatePost(Post post) {
