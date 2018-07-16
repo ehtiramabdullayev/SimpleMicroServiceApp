@@ -3,6 +3,8 @@ package com.simple.microservice.calls.demo;
 import com.simple.microservice.calls.bean.Post;
 import com.simple.microservice.calls.bean.ResponsePost;
 import com.simple.microservice.calls.config.AppConfig;
+import com.simple.microservice.calls.exception.OperationIsNotSuccessfulException;
+import com.simple.microservice.calls.exception.OperationPartiallySuccessfulException;
 import com.simple.microservice.calls.service.PostService;
 import com.simple.microservice.calls.service.PostServiceImpl;
 import org.junit.Assert;
@@ -94,12 +96,53 @@ public class MicroCallsApplicationTests {
         postService.addPost(null);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testAddMultiplePostsWithSuccess(){
+    @Test(expected = OperationIsNotSuccessfulException.class)
+    public void testAddMultiplePostsWithBadStatusCodeException(){
         givenARestTemplate();
         givenPostService();
 
         ResponsePost responsePost = new ResponsePost(2);
+        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+
+        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+
+        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+
+        postService.addMultiplePosts(Collections.singletonList(new Post(1, "", "")));
+
+    }
+
+
+    @Test(expected = OperationPartiallySuccessfulException.class)
+    public void testAddMultiplePostsPartiallyAddedException(){
+        givenARestTemplate();
+        givenPostService();
+        Post[] posts = { new Post(0,"",""),
+                     new Post(0,"",""),
+                     new Post(0,"",""),};
+
+        ResponsePost responsePost = new ResponsePost(4);
+        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+
+        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+
+        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+
+        List<Post> postArray = Arrays.asList(posts);
+        postService.addMultiplePosts(postArray);
+
+    }
+
+
+
+    @Test
+    public void testAddMultiplePostsWithSuccess(){
+        givenARestTemplate();
+        givenPostService();
+
+        ResponsePost responsePost = new ResponsePost(1);
         ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
 
         Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
@@ -109,19 +152,17 @@ public class MicroCallsApplicationTests {
 
         postService.addMultiplePosts(Collections.singletonList(new Post(1, "", "")));
 
-
-
     }
 
 
 
 
-
-
     @Test
-    public void testDeletePost(){
+    public void testDeletePostWithSuccess(){
         givenARestTemplate();
         givenPostService();
+
+
     }
 
     //then
