@@ -76,14 +76,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public int deletePost(int id) {
         URI url = URI.create(ROOT_URI + "/" + id);
-        ResponseEntity<ResponsePost> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, ResponsePost.class);
-        int deletedPostId;
-
-        restTemplate.delete(url);
+        ResponseEntity<Post> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, Post.class);
+        final int deletedPostId;
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             deletedPostId = id;
-
         } else {
             throw new OperationIsNotSuccessfulException("The operation is failed ,returned status code is " + responseEntity.getStatusCode());
 

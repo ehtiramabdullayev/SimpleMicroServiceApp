@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +40,7 @@ public class MicroCallsApplicationTests {
     private List<Post> postList;
 
 
-    public void givenARestTemplate(){
+    public void givenARestTemplate() {
 
         tempMock = Mockito.mock(RestTemplate.class);
     }
@@ -46,13 +48,13 @@ public class MicroCallsApplicationTests {
     //given
 
     @Test
-    public void getAllPostsCalledOnce(){
+    public void getAllPostsCalledOnce() {
         //All given
         givenARestTemplate();
         givenPostService();
 
         Post[] posts = new Post[1];
-        posts[0]=new Post(1,"Qwerty","Post");
+        posts[0] = new Post(1, "Qwerty", "Post");
         ResponseEntity<Post[]> entity = Mockito.mock(ResponseEntity.class);
         Mockito.when(entity.getBody()).thenReturn(posts);
         Mockito.doReturn(entity).when(tempMock).getForEntity(Mockito.anyString(), Mockito.any());
@@ -65,12 +67,9 @@ public class MicroCallsApplicationTests {
     }
 
 
-
-
-
-//
+    //
     @Test
-    public void testAddPost(){
+    public void testAddPost() {
         givenARestTemplate();
         givenPostService();
         ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
@@ -85,8 +84,8 @@ public class MicroCallsApplicationTests {
 
     }
 
-    @Test(expected = OperationIsNotSuccessfulException .class)
-    public void testAddPostWithException(){
+    @Test(expected = OperationIsNotSuccessfulException.class)
+    public void testAddPostWithException() {
         givenARestTemplate();
         givenPostService();
         ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
@@ -97,7 +96,7 @@ public class MicroCallsApplicationTests {
     }
 
     @Test(expected = OperationIsNotSuccessfulException.class)
-    public void testAddMultiplePostsWithBadStatusCodeException(){
+    public void testAddMultiplePostsWithBadStatusCodeException() {
         givenARestTemplate();
         givenPostService();
 
@@ -115,12 +114,12 @@ public class MicroCallsApplicationTests {
 
 
     @Test(expected = OperationPartiallySuccessfulException.class)
-    public void testAddMultiplePostsPartiallyAddedException(){
+    public void testAddMultiplePostsPartiallyAddedException() {
         givenARestTemplate();
         givenPostService();
-        Post[] posts = { new Post(0,"",""),
-                     new Post(0,"",""),
-                     new Post(0,"",""),};
+        Post[] posts = {new Post(0, "", ""),
+                new Post(0, "", ""),
+                new Post(0, "", ""),};
 
         ResponsePost responsePost = new ResponsePost(4);
         ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
@@ -136,9 +135,8 @@ public class MicroCallsApplicationTests {
     }
 
 
-
     @Test
-    public void testAddMultiplePostsWithSuccess(){
+    public void testAddMultiplePostsWithSuccess() {
         givenARestTemplate();
         givenPostService();
 
@@ -155,29 +153,40 @@ public class MicroCallsApplicationTests {
     }
 
 
-
-
     @Test
-    public void testDeletePostWithSuccess(){
+    public void testDeletePostWithSuccess() {
         givenARestTemplate();
         givenPostService();
 
+        Post responsePost = new Post(1, "", "");
+        ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
 
+
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+
+        Mockito.doReturn(responseEntity).when(tempMock).exchange(Mockito.any(URI.class), Mockito.eq(HttpMethod.DELETE), Mockito.any(), Mockito.eq(Post.class));
+
+        try {
+            Assert.assertEquals(postService.deletePost(1),1);
+        } catch (Exception e) {
+            Assert.fail();
+        }
 
 
     }
 
     //then
-    private void whenCallPostServiceForGetAllPosts(){
-        Assert.assertEquals("passed",1,postList.get(0).getId());
+    private void whenCallPostServiceForGetAllPosts() {
+        Assert.assertEquals("passed", 1, postList.get(0).getId());
     }
 
 
-    private void givenPostService(){
+    private void givenPostService() {
         postService = new PostServiceImpl(tempMock);
     }
 
-    private void whenCallingPostService(){
+    private void whenCallingPostService() {
         postList = postService.getAllPosts();
     }
 
