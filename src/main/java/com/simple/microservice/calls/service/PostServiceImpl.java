@@ -6,25 +6,26 @@ import com.simple.microservice.calls.bean.ResponsePost;
 import com.simple.microservice.calls.exception.OperationIsNotSuccessfulException;
 import com.simple.microservice.calls.exception.OperationPartiallySuccessfulException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
 
+    static final String ROOT_URI = "http://localhost:3000/posts";
     private final RestTemplate restTemplate;
 
     @Autowired
     public PostServiceImpl(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
-    static final String ROOT_URI = "http://localhost:3000/posts";
 
     @Override
     public List<Post> getAllPosts() {
@@ -43,7 +44,7 @@ public class PostServiceImpl implements PostService {
         ResponseEntity<HttpStatus> responseEntity = restTemplate.postForEntity(ROOT_URI, post, HttpStatus.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalStateException();
+            throw new OperationIsNotSuccessfulException("The operation is failed ,returned status code is " + responseEntity.getStatusCode());
         }
     }
 
@@ -73,8 +74,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(int id) {
-        restTemplate.delete(ROOT_URI + "/" + id);
+    public int deletePost(int id) {
+        URI url = URI.create(ROOT_URI + "/" + id);
+        ResponseEntity<ResponsePost> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, null, ResponsePost.class);
+        int deletedPostId;
+
+        restTemplate.delete(url);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+            deletedPostId = id;
+
+        } else {
+            throw new OperationIsNotSuccessfulException("The operation is failed ,returned status code is " + responseEntity.getStatusCode());
+
+        }
+        return deletedPostId;
     }
 
 }

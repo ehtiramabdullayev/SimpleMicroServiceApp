@@ -1,8 +1,6 @@
 package com.simple.microservice.calls.config;
 
 
-import com.simple.microservice.calls.bean.Post;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.ComponentScan;

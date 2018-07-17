@@ -85,7 +85,7 @@ public class MicroCallsApplicationTests {
 
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test(expected = OperationIsNotSuccessfulException .class)
     public void testAddPostWithException(){
         givenARestTemplate();
         givenPostService();
@@ -161,6 +161,8 @@ public class MicroCallsApplicationTests {
     public void testDeletePostWithSuccess(){
         givenARestTemplate();
         givenPostService();
+
+
 
 
     }

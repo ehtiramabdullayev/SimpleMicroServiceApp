@@ -1,9 +1,5 @@
 package com.simple.microservice.calls.bean;
 
-import org.springframework.stereotype.Component;
-
-import java.util.Date;
-import java.util.Map;
 
 public class Post {
 
