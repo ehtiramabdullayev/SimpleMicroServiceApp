@@ -165,7 +165,10 @@ public class MicroCallsApplicationTests {
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
         Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
 
-        Mockito.doReturn(responseEntity).when(tempMock).exchange(Mockito.any(URI.class), Mockito.eq(HttpMethod.DELETE), Mockito.any(), Mockito.eq(Post.class));
+        Mockito.doReturn(responseEntity).when(tempMock).exchange(Mockito.any(URI.class),
+                                                                 Mockito.eq(HttpMethod.DELETE),
+                                                                 Mockito.any(),
+                                                                 Mockito.eq(Post.class));
 
         try {
             Assert.assertEquals(postService.deletePost(1),1);
@@ -175,6 +178,31 @@ public class MicroCallsApplicationTests {
 
 
     }
+
+
+    @Test(expected = OperationIsNotSuccessfulException.class)
+    public void testDeletePostWithException() {
+        givenARestTemplate();
+        givenPostService();
+
+        Post responsePost = new Post(1, "", "");
+        ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
+
+
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+
+        Mockito.doReturn(responseEntity).when(tempMock).exchange(Mockito.any(URI.class),
+                Mockito.eq(HttpMethod.DELETE),
+                Mockito.any(),
+                Mockito.eq(Post.class));
+
+      postService.deletePost(1);
+
+
+    }
+
+
 
     //then
     private void whenCallPostServiceForGetAllPosts() {
