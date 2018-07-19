@@ -1,4 +1,4 @@
-package com.simple.microservice.calls.start;
+package com.simple.microservice.calls;
 
 
 import org.springframework.boot.SpringApplication;

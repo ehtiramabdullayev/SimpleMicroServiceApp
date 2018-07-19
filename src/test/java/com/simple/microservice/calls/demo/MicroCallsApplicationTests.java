@@ -33,11 +33,14 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
 public class MicroCallsApplicationTests {
+
     private RestTemplate tempMock;
 
     private PostService postService;
 
     private List<Post> postList;
+
+    private ResponseEntity<HttpStatus> responseEntity;
 
 
     public void givenARestTemplate() {
@@ -54,7 +57,7 @@ public class MicroCallsApplicationTests {
         givenPostService();
 
         Post[] posts = new Post[1];
-        posts[0] = new Post(1, "Qwerty", "Post");
+        posts[0] = new Post(1, "Qwerty", "Post","Created","Comment","Message");
         ResponseEntity<Post[]> entity = Mockito.mock(ResponseEntity.class);
         Mockito.when(entity.getBody()).thenReturn(posts);
         Mockito.doReturn(entity).when(tempMock).getForEntity(Mockito.anyString(), Mockito.any());
@@ -88,11 +91,17 @@ public class MicroCallsApplicationTests {
     public void testAddPostWithException() {
         givenARestTemplate();
         givenPostService();
-        ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        givenAMockResponseWithStatus(HttpStatus.BAD_REQUEST);
+
         Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
 
         postService.addPost(null);
+    }
+
+    private void givenAMockResponseWithStatus(HttpStatus status) {
+        responseEntity = Mockito.mock(ResponseEntity.class);
+
+        Mockito.when(responseEntity.getStatusCode()).thenReturn(status);
     }
 
     @Test(expected = OperationIsNotSuccessfulException.class)
@@ -108,7 +117,7 @@ public class MicroCallsApplicationTests {
 
         Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
 
-        postService.addMultiplePosts(Collections.singletonList(new Post(1, "", "")));
+        postService.addMultiplePosts(Collections.singletonList(new Post(1, "Qwerty", "Post","Created","Comment","Message")));
 
     }
 
@@ -117,9 +126,9 @@ public class MicroCallsApplicationTests {
     public void testAddMultiplePostsPartiallyAddedException() {
         givenARestTemplate();
         givenPostService();
-        Post[] posts = {new Post(0, "", ""),
-                new Post(0, "", ""),
-                new Post(0, "", ""),};
+        Post[] posts = {new Post(0, "Qwerty", "Post","Created","Comment","Message"),
+                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),
+                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),};
 
         ResponsePost responsePost = new ResponsePost(4);
         ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
@@ -148,7 +157,7 @@ public class MicroCallsApplicationTests {
 
         Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
 
-        postService.addMultiplePosts(Collections.singletonList(new Post(1, "", "")));
+        postService.addMultiplePosts(Collections.singletonList(new Post(1,"Qwerty", "Post","Created","Comment","Message")));
 
     }
 
@@ -158,7 +167,7 @@ public class MicroCallsApplicationTests {
         givenARestTemplate();
         givenPostService();
 
-        Post responsePost = new Post(1, "", "");
+        Post responsePost = new Post(1,"Qwerty", "Post","Created","Comment","Message");
         ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
 
 
@@ -170,13 +179,7 @@ public class MicroCallsApplicationTests {
                                                                  Mockito.any(),
                                                                  Mockito.eq(Post.class));
 
-        try {
-            Assert.assertEquals(postService.deletePost(1),1);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-
-
+        Assert.assertEquals(postService.deletePost(1),1);
     }
 
 
@@ -185,7 +188,7 @@ public class MicroCallsApplicationTests {
         givenARestTemplate();
         givenPostService();
 
-        Post responsePost = new Post(1, "", "");
+        Post responsePost = new Post(1, "Qwerty", "Post","Created","Comment","Message");
         ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
 
 
