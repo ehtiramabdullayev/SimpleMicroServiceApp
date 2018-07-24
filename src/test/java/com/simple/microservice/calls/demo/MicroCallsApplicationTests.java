@@ -10,25 +10,18 @@ import com.simple.microservice.calls.service.PostServiceImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestTemplate;
-
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AppConfig.class)
@@ -58,7 +51,7 @@ public class MicroCallsApplicationTests {
 
         Post[] posts = new Post[1];
         posts[0] = new Post(1, "Qwerty", "Post","Created","Comment","Message");
-        ResponseEntity<Post[]> entity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<Post[]> entity = mock(ResponseEntity.class);
         Mockito.when(entity.getBody()).thenReturn(posts);
         Mockito.doReturn(entity).when(tempMock).getForEntity(Mockito.anyString(), Mockito.any());
 
@@ -75,7 +68,7 @@ public class MicroCallsApplicationTests {
     public void testAddPost() {
         givenARestTemplate();
         givenPostService();
-        ResponseEntity<HttpStatus> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<HttpStatus> responseEntity = mock(ResponseEntity.class);
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
         Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
 
@@ -99,7 +92,7 @@ public class MicroCallsApplicationTests {
     }
 
     private void givenAMockResponseWithStatus(HttpStatus status) {
-        responseEntity = Mockito.mock(ResponseEntity.class);
+        responseEntity = mock(ResponseEntity.class);
 
         Mockito.when(responseEntity.getStatusCode()).thenReturn(status);
     }
@@ -110,7 +103,7 @@ public class MicroCallsApplicationTests {
         givenPostService();
 
         ResponsePost responsePost = new ResponsePost(2);
-        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
 
         Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
@@ -131,7 +124,7 @@ public class MicroCallsApplicationTests {
                         new Post(0, "Qwerty", "Post","Created","Comment","Message"),};
 
         ResponsePost responsePost = new ResponsePost(4);
-        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
 
         Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
@@ -150,7 +143,7 @@ public class MicroCallsApplicationTests {
         givenPostService();
 
         ResponsePost responsePost = new ResponsePost(1);
-        ResponseEntity<ResponsePost> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
 
         Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
@@ -168,7 +161,7 @@ public class MicroCallsApplicationTests {
         givenPostService();
 
         Post responsePost = new Post(1,"Qwerty", "Post","Created","Comment","Message");
-        ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<Post> responseEntity = mock(ResponseEntity.class);
 
 
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
@@ -189,7 +182,7 @@ public class MicroCallsApplicationTests {
         givenPostService();
 
         Post responsePost = new Post(1, "Qwerty", "Post","Created","Comment","Message");
-        ResponseEntity<Post> responseEntity = Mockito.mock(ResponseEntity.class);
+        ResponseEntity<Post> responseEntity = mock(ResponseEntity.class);
 
 
         Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);

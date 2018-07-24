@@ -41,9 +41,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void addPost(Post post) {
-        ResponseEntity<HttpStatus> responseEntity = restTemplate.postForEntity(ROOT_URI, post, HttpStatus.class);
+        ResponseEntity<Void> responseEntity = restTemplate.postForEntity(ROOT_URI, post, Void.class);
 
-        if (responseEntity.getStatusCode() != HttpStatus.OK) {
+        if (responseEntity.getStatusCode() != HttpStatus.CREATED) {
             throw new OperationIsNotSuccessfulException("The operation is failed ,returned status code is " + responseEntity.getStatusCode());
         }
     }
@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
     public int addMultiplePosts(List<Post> posts) {
         ResponseEntity<ResponsePost> responseEntity = restTemplate.postForEntity(ROOT_URI, posts, ResponsePost.class);
         int addedPosts = 0;
-        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+        if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
             final ResponsePost responsePost = responseEntity.getBody();
             if (responsePost.getNumberOfPostWereInserted() != posts.size()) {
                 throw new OperationPartiallySuccessfulException("The actual number of inserted post were: " +
