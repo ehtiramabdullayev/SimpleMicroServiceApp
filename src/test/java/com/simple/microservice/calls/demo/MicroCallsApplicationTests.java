@@ -64,21 +64,21 @@ public class MicroCallsApplicationTests {
 
 
     //
-    @Test
-    public void testAddPost() {
-        givenARestTemplate();
-        givenPostService();
-        ResponseEntity<HttpStatus> responseEntity = mock(ResponseEntity.class);
-        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
-        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
-
-        try {
-            postService.addPost(null);
-        } catch (Exception e) {
-            Assert.fail();
-        }
-
-    }
+//    @Test
+//    public void testAddPost() {
+//        givenARestTemplate();
+//        givenPostService();
+//        ResponseEntity<HttpStatus> responseEntity = mock(ResponseEntity.class);
+//        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+//        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+//
+//        try {
+//            postService.addPost(null);
+//        } catch (Exception e) {
+//            Assert.fail();
+//        }
+//
+//    }
 
     @Test(expected = OperationIsNotSuccessfulException.class)
     public void testAddPostWithException() {
@@ -115,44 +115,44 @@ public class MicroCallsApplicationTests {
     }
 
 
-    @Test(expected = OperationPartiallySuccessfulException.class)
-    public void testAddMultiplePostsPartiallyAddedException() {
-        givenARestTemplate();
-        givenPostService();
-        Post[] posts = {new Post(0, "Qwerty", "Post","Created","Comment","Message"),
-                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),
-                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),};
+//    @Test(expected = OperationPartiallySuccessfulException.class)
+//    public void testAddMultiplePostsPartiallyAddedException() {
+//        givenARestTemplate();
+//        givenPostService();
+//        Post[] posts = {new Post(0, "Qwerty", "Post","Created","Comment","Message"),
+//                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),
+//                        new Post(0, "Qwerty", "Post","Created","Comment","Message"),};
+//
+//        ResponsePost responsePost = new ResponsePost(4);
+//        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
+//
+//        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+//        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+//
+//        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+//
+//        List<Post> postArray = Arrays.asList(posts);
+//        postService.addMultiplePosts(postArray);
+//
+//    }
 
-        ResponsePost responsePost = new ResponsePost(4);
-        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
-
-        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
-        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
-
-        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
-
-        List<Post> postArray = Arrays.asList(posts);
-        postService.addMultiplePosts(postArray);
-
-    }
-
-
-    @Test
-    public void testAddMultiplePostsWithSuccess() {
-        givenARestTemplate();
-        givenPostService();
-
-        ResponsePost responsePost = new ResponsePost(1);
-        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
-
-        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
-        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
-
-        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
-
-        postService.addMultiplePosts(Collections.singletonList(new Post(1,"Qwerty", "Post","Created","Comment","Message")));
-
-    }
+//
+//    @Test
+//    public void testAddMultiplePostsWithSuccess() {
+//        givenARestTemplate();
+//        givenPostService();
+//
+//        ResponsePost responsePost = new ResponsePost(1);
+//        ResponseEntity<ResponsePost> responseEntity = mock(ResponseEntity.class);
+//
+//        Mockito.when(responseEntity.getBody()).thenReturn(responsePost);
+//        Mockito.when(responseEntity.getStatusCode()).thenReturn(HttpStatus.OK);
+//
+//        Mockito.doReturn(responseEntity).when(tempMock).postForEntity(Mockito.anyString(), Mockito.any(), Mockito.any());
+//
+//        postService.addMultiplePosts(Collections.singletonList(new Post(1,"Qwerty", "Post","Created","Comment","Message")));
+//
+//    }
 
 
     @Test

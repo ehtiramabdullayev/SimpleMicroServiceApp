@@ -1,0 +1,62 @@
+#main{
+    width:1000px;
+    margin:0px;
+    padding:0px;
+    font-family:Arial;
+}
+
+#header{
+    border: 1px solid gray;
+    width : 998px;
+    height: 100px;
+    text-align : center;
+}
+
+#content-all {
+ width : 998px;
+
+}
+
+#menu{
+    width :200px;
+    border: 1px solid gray;
+    float : left;
+    min-height:500px;
+}
+
+
+#menu a {
+  padding: 6px 6px 6px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: gray;
+    display: block;
+}
+
+#menu a:hover{
+    color:white;
+}
+
+#content{
+    width :794px;
+    border: 1px solid gray;
+    float : left;
+        min-height:500px;
+
+}
+
+#footer{
+ width : 998px;
+text-align:center;
+font-size:10px;
+color:gray;
+}
+
+
+input[type=text], select, textarea {
+    width: 10%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}

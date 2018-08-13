@@ -1,43 +1,41 @@
 package com.simple.microservice.calls.controllers;
 
-import com.simple.microservice.calls.bean.Post;
-import com.simple.microservice.calls.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@RestController
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.simple.microservice.calls.service.PostService;
+
+@Controller
+
 public class PostController {
 
     private PostService postService;
 
-
     @Autowired
-    PostController(PostService postService){
+    PostController(PostService postService) {
         this.postService = postService;
     }
 
-
-    @GetMapping(value = "posts", produces = "application/json")
-    public List<Post> getPosts() {
-        return postService.getAllPosts().stream().filter(post -> post.getId() > 4L).collect(Collectors.toList());
+    @RequestMapping("/home")
+    public String getIndexPage(Map<String, Object> model) {
+        System.out.println("Test");
+        model.put("posts", postService.getAllPosts());
+        return "index";
     }
 
-    @GetMapping(value = "posts2", produces = "application/json")
-    public Map<Long,Post> getPostsWhereIdIsBigger() {
-        return postService.getAllPosts().stream().filter(post ->  post.getId() >4L).collect(Collectors.toMap(k -> k.getId(), v->v));
+
+    @RequestMapping("/post")
+    public String postMessage(Map<String, Object> model) {
+        System.out.println("Post");
+        model.put("posts", postService.getAllPosts());
+        return "post";
     }
 
-    @PostMapping(value = "post",produces = "application/json")
-    public Post addPost(@RequestBody Post post){
-        postService.addPost(post);
-        return post;
-    }
 
 
 }

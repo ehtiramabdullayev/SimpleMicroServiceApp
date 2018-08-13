@@ -1,3 +1,4 @@
+/*
 package testbean;
 
 import org.junit.runner.JUnitCore;
@@ -14,4 +15,4 @@ public class TestRunner {
 
         System.out.println(result.wasSuccessful());
     }
-}
+}*/

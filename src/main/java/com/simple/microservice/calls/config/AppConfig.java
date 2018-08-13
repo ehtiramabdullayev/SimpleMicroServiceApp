@@ -1,6 +1,7 @@
 package com.simple.microservice.calls.config;
 
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 
 import org.springframework.context.annotation.ComponentScan;
@@ -25,4 +26,14 @@ public class AppConfig {
         return restTemplate;
     }
 
+    @Bean
+    @Qualifier("resttemplate2")
+    public RestTemplate restTemplate2() {
+        RestTemplate restTemplate = new RestTemplate();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(new com.fasterxml.jackson.databind.ObjectMapper());
+        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+        restTemplate.getMessageConverters().add(converter);
+        return restTemplate;
+    }
 }

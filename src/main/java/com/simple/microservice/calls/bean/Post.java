@@ -93,4 +93,12 @@ public class Post {
 
         return Objects.hash(id, title, author, created, comments, message);
     }
+
+    @Override
+    public String toString() {
+        return "Post [id=" + id + ", title=" + title + ", author=" + author + ", created=" + created + ", comments="
+                + comments + ", message=" + message + "]";
+    }
+    
+    
 }
